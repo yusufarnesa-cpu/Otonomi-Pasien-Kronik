@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Otonomi Pasien Kronik: Kepatuhan vs Paternalisme</title>
+<style>
+:root{
+  --bg:#f6f8fb;--card:#ffffff;--ink:#1b2a41;--muted:#5b6b82;--line:#e1e7ef;
+  --brand:#2c3e91;--brand2:#1f9e96;--soft:#eaf0fb;--warn:#c2410c;--warnbg:#fff3e8;
+  --ok:#15803d;--okbg:#e8f7ee;--bad:#b91c1c;--badbg:#fdecec;--gold:#b7791f;--goldbg:#fff8e6;
+  --shadow:0 2px 10px rgba(27,42,65,.07);
+}
+:root[data-theme="dark"]{
+  --bg:#0f1726;--card:#17223a;--ink:#e6ecf7;--muted:#9fb0cb;--line:#273556;
+  --brand:#8ea2ff;--brand2:#4fd1c5;--soft:#1c2a4a;--warn:#fb923c;--warnbg:#33210f;
+  --ok:#4ade80;--okbg:#10301e;--bad:#f87171;--badbg:#3a1616;--gold:#f6c453;--goldbg:#33290f;
+  --shadow:0 2px 12px rgba(0,0,0,.35);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:110px}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"Segoe UI",system-ui,-apple-system,"Helvetica Neue",Arial,sans-serif;line-height:1.65;font-size:16px}
+#bar{position:fixed;top:0;left:0;height:4px;width:0;background:linear-gradient(90deg,var(--brand),var(--brand2));z-index:100}
+header.top{position:sticky;top:0;z-index:50;background:var(--card);border-bottom:1px solid var(--line);box-shadow:var(--shadow)}
+.top-in{max-width:1080px;margin:0 auto;padding:10px 16px;display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.logo{font-weight:700;color:var(--brand);white-space:nowrap}
+.search{flex:1;min-width:150px;padding:8px 12px;border:1px solid var(--line);border-radius:10px;background:var(--bg);color:var(--ink);font-size:14px}
+.btn{border:1px solid var(--line);background:var(--bg);color:var(--ink);border-radius:10px;padding:8px 12px;cursor:pointer;font-size:14px}
+.btn:hover{border-color:var(--brand)}
+nav.links{max-width:1080px;margin:0 auto;padding:0 16px 8px;display:flex;gap:6px;overflow-x:auto;scrollbar-width:thin}
+nav.links a{white-space:nowrap;text-decoration:none;color:var(--muted);font-size:13px;padding:4px 10px;border-radius:999px;border:1px solid var(--line);background:var(--bg)}
+nav.links a:hover,nav.links a.on{color:#fff;background:var(--brand);border-color:var(--brand)}
+:root[data-theme="dark"] nav.links a:hover,:root[data-theme="dark"] nav.links a.on{color:#0f1726}
+main{max-width:1080px;margin:0 auto;padding:20px 16px 80px}
+.cover{background:linear-gradient(135deg,#2c3e91,#1f9e96);color:#fff;border-radius:20px;padding:34px 28px;box-shadow:var(--shadow);margin-bottom:20px}
+.cover small{opacity:.85;letter-spacing:.08em;text-transform:uppercase;font-size:12px}
+.cover h1{margin:8px 0 6px;font-size:clamp(24px,4.5vw,38px);line-height:1.2}
+.cover p{margin:4px 0;opacity:.95}
+.chips{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+.chip{background:rgba(255,255,255,.18);padding:4px 12px;border-radius:999px;font-size:13px}
+.prog{margin-top:18px;background:rgba(255,255,255,.2);border-radius:999px;height:10px;overflow:hidden}
+.prog i{display:block;height:100%;width:0;background:#fff;transition:width .3s}
+.sec{background:var(--card);border:1px solid var(--line);border-radius:16px;margin-bottom:14px;box-shadow:var(--shadow);overflow:hidden}
+.sec>summary{list-style:none;cursor:pointer;padding:16px 20px;font-weight:700;font-size:18px;display:flex;align-items:center;gap:10px;color:var(--brand)}
+.sec>summary::-webkit-details-marker{display:none}
+.sec>summary::after{content:"▾";margin-left:auto;transition:transform .2s;color:var(--muted)}
+.sec[open]>summary::after{transform:rotate(180deg)}
+.sec .body{padding:2px 20px 20px}
+.badge{display:inline-block;font-size:11.5px;font-weight:700;padding:2px 9px;border-radius:999px;margin-right:6px;vertical-align:middle;letter-spacing:.02em}
+.b-hy{background:var(--badbg);color:var(--bad)}.b-mm{background:var(--goldbg);color:var(--gold)}
+.b-tr{background:var(--warnbg);color:var(--warn)}.b-fa{background:var(--soft);color:var(--brand)}
+.b-hd{background:#efe7fb;color:#6b3fb5}:root[data-theme="dark"] .b-hd{background:#2a1f45;color:#c4a8ff}
+.b-cp{background:var(--okbg);color:var(--ok)}
+.box{border-left:4px solid var(--brand);background:var(--soft);padding:12px 16px;border-radius:0 12px 12px 0;margin:12px 0}
+.box.warn{border-color:var(--warn);background:var(--warnbg)}
+.box.ok{border-color:var(--ok);background:var(--okbg)}
+.box.gold{border-color:var(--gold);background:var(--goldbg)}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px}
+.card{border:1px solid var(--line);border-radius:14px;padding:14px 16px;background:var(--bg)}
+.card h4{margin:0 0 6px;color:var(--brand)}
+table{width:100%;border-collapse:collapse;margin:10px 0;font-size:15px}
+.tw{overflow-x:auto}
+th,td{border:1px solid var(--line);padding:9px 11px;text-align:left;vertical-align:top}
+th{background:var(--soft);color:var(--brand)}
+ul{padding-left:22px;margin:6px 0}li{margin:3px 0}
+.flow{display:flex;flex-direction:column;align-items:stretch;gap:0;margin:12px 0}
+.step{border:1px solid var(--line);background:var(--bg);border-radius:12px;padding:10px 14px}
+.step b{color:var(--brand)}
+.arr{text-align:center;color:var(--brand2);font-size:20px;line-height:1.2}
+.check label{display:flex;gap:10px;align-items:flex-start;padding:8px 4px;cursor:pointer}
+.check input{margin-top:6px;width:18px;height:18px;accent-color:var(--brand2)}
+.check input:checked+span{text-decoration:line-through;color:var(--muted)}
+.mn{font-size:19px;font-weight:700;color:var(--brand2);letter-spacing:.04em}
+.q{border:1px solid var(--line);border-radius:14px;padding:16px;margin:14px 0;background:var(--bg)}
+.q p.qt{margin:0 0 10px;font-weight:600}
+.opt{display:block;width:100%;text-align:left;margin:6px 0;padding:10px 12px;border:1px solid var(--line);border-radius:10px;background:var(--card);color:var(--ink);cursor:pointer;font-size:15px;font-family:inherit}
+.opt:hover:not(:disabled){border-color:var(--brand)}
+.opt.right{border-color:var(--ok);background:var(--okbg)}
+.opt.wrong{border-color:var(--bad);background:var(--badbg)}
+.opt:disabled{cursor:default;color:var(--ink)}
+.fb{display:none;margin-top:10px}
+.fb.show{display:block}
+.score{position:sticky;top:96px;display:inline-block;background:var(--brand);color:#fff;padding:4px 14px;border-radius:999px;font-size:14px;z-index:5}
+:root[data-theme="dark"] .score{color:#0f1726}
+.hide{display:none!important}
+#toTop{position:fixed;right:16px;bottom:16px;z-index:60;display:none}
+footer{text-align:center;color:var(--muted);font-size:13px;margin-top:30px}
+@media(max-width:600px){.cover{padding:24px 18px}.sec>summary{font-size:16px}th,td{padding:7px}}
+@media print{header.top,#toTop,#bar{display:none}.sec{box-shadow:none}.sec .body{display:block}}
+</style>
+</head>
+<body>
+<div id="bar"></div>
+<header class="top">
+  <div class="top-in">
+    <span class="logo">🩺 Study Companion · Blok Endokrin</span>
+    <input id="q" class="search" type="search" placeholder="Cari istilah, mis. paternalisme, insulin, dokumentasi…" aria-label="Cari">
+    <button class="btn" id="expand">Buka semua</button>
+    <button class="btn" id="collapse">Tutup semua</button>
+    <button class="btn" id="theme" aria-label="Ganti tema">🌙</button>
+  </div>
+  <nav class="links" id="nav"></nav>
+</header>
+
+<main>
+  <section class="cover" id="cover">
+    <small>Blok Endokrin · Etika Kedokteran / Bioetika Klinis</small>
+    <h1>Otonomi Pasien Kronik: Kepatuhan Versus Paternalisme</h1>
+    <p>Materi: Siti Soekiswati · Pendidikan Dokter FK UMS</p>
+    <p>Kasus utama: pasien DM tipe 2 menolak insulin karena takut disuntik</p>
+    <div class="chips">
+      <span class="chip">Adherence vs Compliance</span>
+      <span class="chip">Autonomy vs Beneficence</span>
+      <span class="chip">4 Prinsip Bioetika</span>
+      <span class="chip">Dokumentasi Penolakan</span>
+    </div>
+    <div style="margin-top:14px;font-size:14px">Progress belajar: <b id="pp">0%</b> (checklist tujuan + kuis)</div>
+    <div class="prog"><i id="pbar"></i></div>
+  </section>
+
+  <details class="sec" id="tujuan" open data-title="Tujuan Belajar">
+    <summary>🎯 Tujuan Belajar</summary>
+    <div class="body check">
+      <p>Centang setiap tujuan jika sudah menguasainya.</p>
+      <label><input type="checkbox" class="ck"><span>Menjelaskan konsep kepatuhan (adherence), otonomi pasien, dan paternalisme</span></label>
+      <label><input type="checkbox" class="ck"><span>Menganalisis dilema bioetika ketika pilihan pasien bertentangan dengan rekomendasi dokter</span></label>
+      <label><input type="checkbox" class="ck"><span>Merumuskan solusi/tindakan klinis berbasis bioetika</span></label>
+      <label><input type="checkbox" class="ck"><span>Menerapkan analisis 4 prinsip (autonomy, beneficence, non-maleficence, justice) pada kasus DM tipe 2 yang menolak insulin</span></label>
+    </div>
+  </details>
+
+  <details class="sec" id="prioritas" open data-title="Prioritas Belajar">
+    <summary>📊 Urutan Prioritas Belajar</summary>
+    <div class="body">
+      <p>Disusun dari yang paling penting, bukan menurut urutan slide.</p>
+      <div class="tw"><table>
+        <tr><th>Level</th><th>Topik</th><th>Alasan</th></tr>
+        <tr><td><span class="badge b-hy">🔥 HIGH YIELD</span></td><td>Dilema autonomy vs beneficence pada kasus penolakan insulin dan solusi etisnya</td><td>Menjadi inti kasus dan tujuan belajar nomor 2 dan 3</td></tr>
+        <tr><td><span class="badge b-hy">🔥 HIGH YIELD</span></td><td>Perbedaan adherence, compliance, paternalism</td><td>Definisi yang mudah tertukar dan langsung diuji</td></tr>
+        <tr><td><span class="badge b-mm">🧠 MUST MEMORIZE</span></td><td>Analisis 4 prinsip pada kasus (isi tiap prinsip)</td><td>Kerangka jawaban untuk soal kasus</td></tr>
+        <tr><td><span class="badge b-fa">❓ PENDUKUNG</span></td><td>Dokumentasi tertulis penolakan terapi</td><td>Langkah akhir tindakan yang sering terlewat</td></tr>
+      </table></div>
+      <div class="box gold"><b>SKDI:</b> belum ada file SKDI yang diberikan, jadi tidak dilakukan mapping tingkat kompetensi. Untuk topik DM tipe 2 itu sendiri, kirim SKDI jika ingin dipetakan.</div>
+    </div>
+  </details>
+
+  <details class="sec" id="highyield" open data-title="High Yield">
+    <summary>🔥 High-Yield Ringkas</summary>
+    <div class="body">
+      <div class="grid">
+        <div class="card"><span class="badge b-hy">HIGH YIELD</span><h4>Adherence</h4>Kepatuhan konsisten menjalankan rencana terapi yang <b>disepakati</b>, ada keterlibatan aktif karena <b>memahami tujuan terapi</b>.</div>
+        <div class="card"><span class="badge b-hy">HIGH YIELD</span><h4>Compliance</h4>Kepatuhan mengikuti aturan/perintah/instruksi; harus <b>selalu diperintahkan</b> setiap saat.</div>
+        <div class="card"><span class="badge b-hy">HIGH YIELD</span><h4>Paternalisme</h4>Tindakan dokter membatasi/mengarahkan, <b>agak memaksa</b>, dengan <b>mengesampingkan pilihan pasien</b>.</div>
+        <div class="card"><span class="badge b-hy">HIGH YIELD</span><h4>Dilema kasus ini</h4>Autonomy <b>vs</b> beneficence (dokter ingin berbuat baik, pasien menolak).</div>
+      </div>
+      <div class="box ok"><b>Satu kalimat kunci:</b> bila pasien menolak, dokter <b>menggali alasan, memperbaiki pemahaman</b>, dan jika pasien tetap menolak, dokter <b>menghormati</b> pilihannya serta <b>mendokumentasikan penolakan secara tertulis</b>.</div>
+    </div>
+  </details>
+
+  <details class="sec" id="dosen" open data-title="Highlight Dosen">
+    <summary>👨‍🏫 Highlight Dosen</summary>
+    <div class="body">
+      <p><span class="badge b-hd">HIGHLIGHT DOSEN</span> Poin yang ditekankan dalam slide dosen:</p>
+      <ul>
+        <li>Tiga capaian pembelajaran (konsep, analisis dilema, solusi klinis) menjadi kerangka seluruh materi.</li>
+        <li>Adherence dibedakan tegas dari compliance: kata kunci <b>keterlibatan aktif</b> dan <b>memahami tujuan terapi</b>.</li>
+        <li>Paternalisme dikaitkan dengan beneficence dan menghindari nonmaleficence, tetapi <b>berbenturan</b> dengan autonomy sehingga menimbulkan dilema etik klinis.</li>
+        <li>Solusi etis bersifat berurutan: gali alasan, perbaiki pemahaman, hormati pilihan, dokumentasi tertulis.</li>
+      </ul>
+      <div class="box gold">Belum ada transkrip penjelasan lisan dosen. Jika ada, kirim agar bagian ini bisa diperdalam.</div>
+    </div>
+  </details>
+
+  <details class="sec" id="teori" open data-title="Teori Inti konsep paternalisme adherence compliance autonomy beneficence">
+    <summary>📘 Teori Inti (Alur Konsep → Dilema → Solusi)</summary>
+    <div class="body">
+      <p>Materi ini bukan penyakit, jadi disusun mengikuti alur yang paling logis: <b>konsep dasar → hubungan antar prinsip → analisis kasus → tindakan klinis</b>.</p>
+
+      <h3>1. Konsep dasar</h3>
+      <ul>
+        <li><b>Adherence</b>: pasien konsisten melaksanakan rencana terapi yang disepakati bersama dokter; ia terlibat aktif karena memahami tujuan terapi.</li>
+        <li><b>Compliance</b>: pasien mengikuti aturan, perintah, atau instruksi dokter; kepatuhan bergantung pada perintah setiap saat.</li>
+        <li><b>Paternalism</b>: tindakan dokter membatasi atau mengarahkan pasien secara agak memaksa dengan mengesampingkan pilihan pasien.</li>
+      </ul>
+
+      <h3>2. Paternalisme dalam kerangka prinsip etik</h3>
+      <div class="flow">
+        <div class="step"><b>Paternalisme dokter</b></div><div class="arr">↓</div>
+        <div class="step">Berlandaskan <b>beneficence</b> dan upaya menghindari <b>nonmaleficence</b> (berbuat baik, tidak merugikan pasien)</div><div class="arr">↓</div>
+        <div class="step">Berbenturan dengan <b>autonomy</b> (hak pasien memilih)</div><div class="arr">↓</div>
+        <div class="step"><b>Dilema etik klinis</b></div>
+      </div>
+
+      <h3>3. Kasus: DM tipe 2 menolak insulin</h3>
+      <div class="box"><b>Kasus.</b> Pasien DM tipe 2 dirawat di bangsal rumah sakit dengan kadar glukosa darah belum terkendali. Pasien menolak terapi insulin karena takut disuntik.</div>
+      <div class="tw"><table>
+        <tr><th>Prinsip</th><th>Penerapan pada kasus</th></tr>
+        <tr><td><b>Autonomy</b></td><td>Informasi harus jelas dan dipahami pasien; kuncinya komunikasi efektif</td></tr>
+        <tr><td><b>Beneficence</b></td><td>Dokter menjelaskan alasan ilmiah pemakaian insulin</td></tr>
+        <tr><td><b>Non-maleficence</b></td><td>Risiko penundaan terapi dijelaskan jelas, termasuk cara mencegah hipoglikemia</td></tr>
+        <tr><td><b>Justice</b></td><td>Evaluasi biaya, akses, atau edukasi yang kurang</td></tr>
+      </table></div>
+      <p><b>Dilema etik klinis:</b> autonomy vs beneficence.</p>
+
+      <h3>4. Solusi / tindakan klinis</h3>
+      <div class="flow">
+        <div class="step"><b>1. Gali alasan penolakan</b> (di kasus: takut disuntik)</div><div class="arr">↓</div>
+        <div class="step"><b>2. Perbaiki pemahaman pasien</b> (alasan ilmiah insulin, risiko penundaan, pencegahan hipoglikemia)</div><div class="arr">↓</div>
+        <div class="step"><b>3. Evaluasi hambatan justice</b> (biaya, akses, edukasi)</div><div class="arr">↓</div>
+        <div class="step"><b>4. Pasien tetap menolak?</b> Dokter tetap <b>menghormati</b> pilihannya</div><div class="arr">↓</div>
+        <div class="step"><b>5. Dokumentasikan penolakan secara tertulis</b></div>
+      </div>
+    </div>
+  </details>
+
+  <details class="sec" id="tabel" open data-title="Tabel Perbandingan">
+    <summary>🗂️ Tabel Pembeda Konsep</summary>
+    <div class="body">
+      <div class="tw"><table>
+        <tr><th></th><th>Adherence</th><th>Compliance</th><th>Paternalism</th></tr>
+        <tr><th>Pelaku</th><td>Pasien</td><td>Pasien</td><td>Dokter</td></tr>
+        <tr><th>Dasar</th><td>Rencana terapi yang disepakati</td><td>Aturan/perintah/instruksi</td><td>Dokter mengarahkan, agak memaksa</td></tr>
+        <tr><th>Peran pasien</th><td>Terlibat aktif, paham tujuan terapi</td><td>Mengikuti, perlu diperintah setiap saat</td><td>Pilihan pasien dikesampingkan</td></tr>
+        <tr><th>Prinsip utama</th><td>Selaras dengan autonomy</td><td>Pasif terhadap instruksi</td><td>Beneficence mengalahkan autonomy</td></tr>
+      </table></div>
+      <div class="box gold">Baris "Prinsip utama" adalah rangkuman dari hubungan yang tersirat di slide, bukan kalimat langsung dosen.</div>
+    </div>
+  </details>
+
+  <details class="sec" id="korelasi" open data-title="Korelasi Klinis">
+    <summary>🩺 Korelasi Klinis (Blok Endokrin)</summary>
+    <div class="body">
+      <p><span class="badge b-cp">CLINICAL PEARL</span> Pasien kronik seperti DM tipe 2 memerlukan terapi jangka panjang, sehingga kualitas komunikasi menentukan apakah ia akan menjadi <b>adherent</b> atau sekadar <b>compliant</b>.</p>
+      <ul>
+        <li>Penolakan insulin pada kasus berakar pada rasa takut disuntik, bukan penolakan terhadap tujuan terapi. Karena itu langkah pertama adalah menggali alasan, bukan memaksa.</li>
+        <li>Glukosa darah yang belum terkendali membuat risiko penundaan terapi harus dijelaskan jelas, berpasangan dengan penjelasan cara mencegah hipoglikemia agar pasien tidak hanya mendengar risiko.</li>
+        <li>Faktor justice (biaya, akses, edukasi kurang) bisa menjadi penyebab tersembunyi penolakan atau ketidakpatuhan.</li>
+      </ul>
+    </div>
+  </details>
+
+  <details class="sec" id="mnemonik" open data-title="Mnemonik">
+    <summary>🧩 Mnemonik Hafalan Cepat</summary>
+    <div class="body">
+      <p class="mn">A-B-N-J</p>
+      <p><b>A</b>utonomy (informasi dipahami) · <b>B</b>eneficence (alasan ilmiah) · <b>N</b>on-maleficence (risiko + cegah hipoglikemia) · <b>J</b>ustice (biaya, akses, edukasi)</p>
+      <p class="mn">G-P-H-D</p>
+      <p>Solusi etis: <b>G</b>ali alasan → <b>P</b>erbaiki pemahaman → <b>H</b>ormati pilihan → <b>D</b>okumentasi tertulis</p>
+      <p class="mn">Adherence = Aktif · Compliance = Cuma diperintah</p>
+    </div>
+  </details>
+
+  <details class="sec" id="jebakan" open data-title="Jebakan Soal">
+    <summary>⚠️ Common Traps</summary>
+    <div class="body">
+      <div class="box warn"><span class="badge b-tr">TRAP</span> <b>Adherence dan compliance dianggap sama.</b> Compliance hanya mengikuti perintah; adherence menuntut keterlibatan aktif dan pemahaman tujuan terapi.</div>
+      <div class="box warn"><span class="badge b-tr">TRAP</span> <b>"Demi kebaikan pasien" tidak otomatis benar.</b> Memaksakan insulin tanpa persetujuan adalah paternalisme yang mengesampingkan autonomy.</div>
+      <div class="box warn"><span class="badge b-tr">TRAP</span> <b>Langsung menerima penolakan tanpa upaya.</b> Urutan yang benar: gali alasan dan perbaiki pemahaman dulu, baru hormati keputusan akhir.</div>
+      <div class="box warn"><span class="badge b-tr">TRAP</span> <b>Lupa dokumentasi.</b> Penolakan yang dihormati tetap harus dicatat tertulis.</div>
+      <div class="box warn"><span class="badge b-tr">TRAP</span> <b>Mengabaikan justice.</b> Penolakan atau ketidakpatuhan bisa berasal dari biaya, akses, atau edukasi yang kurang.</div>
+    </div>
+  </details>
+
+  <details class="sec" id="faq" open data-title="Poin Sering Ditanyakan">
+    <summary>❓ Prediksi Poin Ujian</summary>
+    <div class="body">
+      <ul>
+        <li><span class="badge b-fa">FA</span> Definisi adherence, compliance, paternalism (pilih pernyataan yang tepat).</li>
+        <li><span class="badge b-fa">FA</span> Dilema etik pada pasien menolak terapi: pasangan prinsip yang bertentangan.</li>
+        <li><span class="badge b-fa">FA</span> Tindakan pertama dokter terhadap pasien yang menolak.</li>
+        <li><span class="badge b-fa">FA</span> Prinsip yang diwakili oleh tiap tindakan dokter (menjelaskan alasan ilmiah, menjelaskan risiko, menilai biaya).</li>
+        <li><span class="badge b-fa">FA</span> Tindakan jika pasien tetap menolak setelah edukasi.</li>
+      </ul>
+      <div class="box gold">Soal tahun lalu belum diberikan, jadi poin ini adalah prediksi dari struktur materi, bukan hasil analisis pola ujian.</div>
+    </div>
+  </details>
+
+  <details class="sec" id="quick" open data-title="Quick Review">
+    <summary>⚡ Jika Hanya Punya 5 Menit</summary>
+    <div class="body">
+      <ul>
+        <li><b>Adherence</b> = patuh karena paham dan terlibat · <b>Compliance</b> = patuh karena diperintah · <b>Paternalism</b> = dokter memaksa, pilihan pasien dikesampingkan.</li>
+        <li>Paternalisme berasal dari beneficence/nonmaleficence tetapi bertabrakan dengan <b>autonomy</b> → <b>dilema etik klinis</b>.</li>
+        <li>Kasus DM2 menolak insulin: dilema <b>autonomy vs beneficence</b>.</li>
+        <li>Solusi: <b>gali alasan → perbaiki pemahaman → hormati pilihan → dokumentasi tertulis</b>.</li>
+        <li>Jangan lupa evaluasi <b>justice</b>: biaya, akses, edukasi.</li>
+      </ul>
+    </div>
+  </details>
+
+  <details class="sec" id="kuis" open data-title="Kuis Latihan">
+    <summary>📝 Kuis Interaktif (7 Soal)</summary>
+    <div class="body">
+      <span class="score" id="score">Skor: 0 / 7</span>
+      <div id="quiz"></div>
+      <button class="btn" id="reset">Ulangi kuis</button>
+    </div>
+  </details>
+
+  <footer>Disusun dari PPT "Otonomi Pasien Kronik: Kepatuhan Versus Paternalisme" · Satu file, bisa dibuka offline</footer>
+</main>
+<button class="btn" id="toTop">↑ Atas</button>
+
+<script>
+(function(){
+  var $=function(s,r){return (r||document).querySelector(s)};
+  var $$=function(s,r){return Array.prototype.slice.call((r||document).querySelectorAll(s))};
+  function sg(k){try{return localStorage.getItem(k)}catch(e){return null}}
+  function ss(k,v){try{localStorage.setItem(k,v)}catch(e){}}
+
+  /* Tema */
+  var root=document.documentElement;
+  var saved=sg('endo-theme');
+  if(saved){root.setAttribute('data-theme',saved)}
+  function icon(){$('#theme').textContent=root.getAttribute('data-theme')==='dark'?'☀️':'🌙'}
+  icon();
+  $('#theme').onclick=function(){
+    var n=root.getAttribute('data-theme')==='dark'?'light':'dark';
+    root.setAttribute('data-theme',n);ss('endo-theme',n);icon();
+  };
+
+  /* Nav */
+  var secs=$$('details.sec');
+  var nav=$('#nav');
+  secs.forEach(function(s){
+    var a=document.createElement('a');
+    a.href='#'+s.id;
+    a.textContent=s.querySelector('summary').textContent.replace(/^[^\wÀ-ÿ]+/,'').trim();
+    a.onclick=function(){s.open=true};
+    nav.appendChild(a);
+  });
+  var links=$$('a',nav);
+
+  /* Scroll bar + nav aktif + tombol atas */
+  window.addEventListener('scroll',function(){
+    var h=document.documentElement;
+    var pct=h.scrollTop/(h.scrollHeight-h.clientHeight||1)*100;
+    $('#bar').style.width=pct+'%';
+    $('#toTop').style.display=h.scrollTop>400?'block':'none';
+    var cur=null;
+    secs.forEach(function(s){if(s.getBoundingClientRect().top<140)cur=s.id});
+    links.forEach(function(a){a.classList.toggle('on',a.getAttribute('href')==='#'+cur)});
+  },{passive:true});
+  $('#toTop').onclick=function(){window.scrollTo({top:0,behavior:'smooth'})};
+
+  /* Buka/tutup semua */
+  $('#expand').onclick=function(){secs.forEach(function(s){s.open=true})};
+  $('#collapse').onclick=function(){secs.forEach(function(s){s.open=false})};
+
+  /* Pencarian */
+  $('#q').addEventListener('input',function(){
+    var t=this.value.trim().toLowerCase();
+    secs.forEach(function(s){
+      if(!t){s.classList.remove('hide');return}
+      var hit=(s.textContent+' '+(s.getAttribute('data-title')||'')).toLowerCase().indexOf(t)>-1;
+      s.classList.toggle('hide',!hit);
+      if(hit)s.open=true;
+    });
+  });
+
+  /* Progress belajar */
+  var cks=$$('.ck');
+  var answered=0,correct=0;
+  var TOTAL_Q=7;
+  function updateProgress(){
+    var c=cks.filter(function(x){return x.checked}).length;
+    var parts=cks.length+TOTAL_Q;
+    var pct=Math.round((c+answered)/parts*100);
+    $('#pp').textContent=pct+'%';
+    $('#pbar').style.width=pct+'%';
+  }
+  cks.forEach(function(c,i){
+    c.checked=sg('endo-ck'+i)==='1';
+    c.onchange=function(){ss('endo-ck'+i,c.checked?'1':'0');updateProgress()};
+  });
+
+  /* Kuis */
+  var L=['A','B','C','D','E'];
+  var Q=[
+   {q:"Seorang pasien DM tipe 2 dirawat di bangsal dengan glukosa darah belum terkendali. Pasien menolak insulin karena takut disuntik. Apa langkah pertama dokter yang paling tepat?",
+    o:["Memulai insulin karena tindakan ini jelas menguntungkan pasien","Meminta pasien menandatangani surat pulang atas permintaan sendiri","Menggali alasan penolakan dan memperbaiki pemahaman pasien","Mengganti terapi tanpa menjelaskan perubahan kepada pasien","Menunda pembicaraan sampai keluarga pasien yang memutuskan"],
+    a:2,
+    clue:"Clue: glukosa belum terkendali, pasien menolak insulin, alasannya rasa takut disuntik.",
+    interp:"Alasan penolakan berupa ketakutan, bukan penolakan tujuan terapi, sehingga masalahnya ada pada pemahaman dan komunikasi.",
+    concl:"Respons etis dimulai dari menggali alasan penolakan, lalu memperbaiki pemahaman pasien.",
+    why:["Memaksa tindakan mengesampingkan pilihan pasien (paternalisme).","Pasien dilepas tanpa upaya edukasi terlebih dahulu.","Benar.","Pasien tidak dilibatkan, melanggar autonomy.","Pasien dewasa tetap pemilik keputusan atas dirinya."],
+    pearl:"Urutan: gali alasan → perbaiki pemahaman → hormati → dokumentasi."},
+   {q:"Seorang pasien menjalankan terapi secara konsisten sesuai rencana yang telah disepakati bersama dokter, terlibat aktif karena memahami tujuan terapi. Perilaku ini paling tepat disebut:",
+    o:["Adherence","Paternalisme","Compliance","Beneficence","Justice"],
+    a:0,
+    clue:"Clue: rencana disepakati, terlibat aktif, memahami tujuan terapi.",
+    interp:"Tiga ciri tersebut adalah definisi adherence.",
+    concl:"Kepatuhan yang disertai keterlibatan dan pemahaman = adherence.",
+    why:["Benar.","Paternalisme adalah tindakan dokter, bukan perilaku pasien.","Compliance hanya mengikuti instruksi dan perlu diperintahkan setiap saat.","Beneficence adalah prinsip etik dokter berbuat baik.","Justice berkaitan dengan keadilan dan akses."],
+    pearl:"Adherence = aktif dan paham; compliance = mengikuti perintah."},
+   {q:"Dokter yakin insulin adalah terapi terbaik, lalu memberikannya kepada pasien yang menolak tanpa penjelasan lebih lanjut. Prinsip etik yang dikesampingkan adalah:",
+    o:["Non-maleficence","Justice","Beneficence","Veracity","Autonomy"],
+    a:4,
+    clue:"Clue: pasien menolak, dokter tetap memberikan tindakan tanpa penjelasan.",
+    interp:"Tindakan membatasi dan agak memaksa dengan mengesampingkan pilihan pasien adalah paternalisme.",
+    concl:"Yang dikalahkan oleh paternalisme adalah autonomy pasien.",
+    why:["Dokter justru merasa menghindari kerugian bagi pasien.","Tidak ada isu pemerataan atau akses pada vignette.","Beneficence justru menjadi dasar dokter bertindak.","Bukan prinsip yang dibahas dalam materi ini.","Benar."],
+    pearl:"Paternalisme = beneficence mengalahkan autonomy."},
+   {q:"Pada kasus pasien DM tipe 2 yang menolak terapi insulin, dilema etik klinis yang terjadi adalah antara:",
+    o:["Justice dan non-maleficence","Autonomy dan beneficence","Beneficence dan non-maleficence","Autonomy dan justice","Non-maleficence dan veracity"],
+    a:1,
+    clue:"Clue: dokter ingin berbuat baik lewat insulin, pasien memilih menolak.",
+    interp:"Keinginan dokter untuk memberi manfaat berhadapan dengan hak pasien memilih.",
+    concl:"Dilema: autonomy vs beneficence.",
+    why:["Tidak menjadi inti pertentangan pada kasus.","Benar.","Keduanya sama-sama mendorong dokter bertindak, bukan bertentangan.","Justice hanya dievaluasi sebagai faktor pendukung.","Veracity tidak menjadi bagian analisis kasus."],
+    pearl:"Hafalkan pasangan: autonomy vs beneficence."},
+   {q:"Setelah dokter menggali alasan dan memperbaiki pemahaman, pasien DM tipe 2 tetap menolak insulin. Tindakan yang paling tepat adalah:",
+    o:["Melakukan pemberian insulin saat pasien tertidur","Mengancam menghentikan seluruh pelayanan","Meminta keluarga memaksa pasien menerima suntikan","Menghormati keputusan pasien dan mendokumentasikan penolakan secara tertulis","Mencatat penolakan secara lisan saja kepada perawat"],
+    a:3,
+    clue:"Clue: edukasi sudah dilakukan, pasien tetap pada pilihannya.",
+    interp:"Autonomy pasien harus dihormati setelah upaya pemahaman dilakukan.",
+    concl:"Hormati pilihan dan buat dokumentasi penolakan tertulis.",
+    why:["Pemaksaan tersembunyi, melanggar autonomy.","Bentuk tekanan yang tidak etis.","Pemaksaan melalui pihak lain.","Benar.","Dokumentasi harus tertulis, bukan lisan."],
+    pearl:"Penolakan yang dihormati wajib tercatat tertulis."},
+   {q:"Dokter menjelaskan kepada pasien risiko penundaan terapi insulin dan cara mencegah hipoglikemia. Penjelasan ini terutama menerapkan prinsip:",
+    o:["Autonomy","Justice","Non-maleficence","Paternalisme","Compliance"],
+    a:2,
+    clue:"Clue: risiko penundaan terapi dan pencegahan hipoglikemia.",
+    interp:"Menjelaskan risiko dan cara mencegah bahaya adalah upaya tidak merugikan pasien.",
+    concl:"Prinsip yang diterapkan adalah non-maleficence.",
+    why:["Autonomy menekankan informasi dipahami pasien dan komunikasi efektif.","Justice menyangkut biaya, akses, edukasi.","Benar.","Paternalisme bukan prinsip etik, melainkan sikap dokter.","Compliance adalah perilaku pasien."],
+    pearl:"Risiko penundaan + pencegahan hipoglikemia = non-maleficence."},
+   {q:"Dokter mengevaluasi apakah penolakan insulin berkaitan dengan biaya, akses layanan, atau edukasi yang kurang. Evaluasi ini mewakili prinsip:",
+    o:["Justice","Beneficence","Autonomy","Non-maleficence","Compliance"],
+    a:0,
+    clue:"Clue: biaya, akses, edukasi yang kurang.",
+    interp:"Hambatan struktural dan keadilan akses termasuk dalam prinsip justice.",
+    concl:"Prinsip yang tepat adalah justice.",
+    why:["Benar.","Beneficence adalah penjelasan alasan ilmiah insulin.","Autonomy adalah informasi yang dipahami pasien.","Non-maleficence adalah risiko penundaan dan pencegahan hipoglikemia.","Compliance bukan prinsip etik."],
+    pearl:"Justice dalam kasus ini = evaluasi biaya, akses, edukasi."}
+  ];
+  var box=$('#quiz');
+  function build(){
+    box.innerHTML='';answered=0;correct=0;
+    Q.forEach(function(it,qi){
+      var d=document.createElement('div');d.className='q';
+      var h='<p class="qt">'+(qi+1)+'. '+it.q+'</p>';
+      it.o.forEach(function(t,oi){h+='<button class="opt" data-q="'+qi+'" data-o="'+oi+'"><b>'+L[oi]+'.</b> '+t+'</button>'});
+      h+='<div class="fb" id="fb'+qi+'"></div>';
+      d.innerHTML=h;box.appendChild(d);
+    });
+    $('#score').textContent='Skor: 0 / '+TOTAL_Q;
+    updateProgress();
+  }
+  box.addEventListener('click',function(e){
+    var b=e.target.closest('.opt');if(!b)return;
+    var qi=+b.getAttribute('data-q'),oi=+b.getAttribute('data-o'),it=Q[qi];
+    var btns=$$('.opt[data-q="'+qi+'"]');
+    btns.forEach(function(x,i){x.disabled=true;if(i===it.a)x.classList.add('right')});
+    var ok=oi===it.a;
+    if(!ok)b.classList.add('wrong');
+    answered++;if(ok)correct++;
+    var wrong='';
+    it.why.forEach(function(w,i){if(i!==it.a)wrong+='<li><b>'+L[i]+'.</b> '+w+'</li>'});
+    var f=$('#fb'+qi);
+    f.innerHTML='<div class="box '+(ok?'ok':'warn')+'"><b>'+(ok?'✅ Benar':'❌ Belum tepat')+'</b> · Jawaban benar: <b>'+L[it.a]+'</b></div>'
+      +'<div class="box"><b>🧠 Penjelasan</b><br>'+it.clue+'<br>'+it.interp+'<br><b>Kesimpulan:</b> '+it.concl+'</div>'
+      +'<div class="box warn"><b>❌ Mengapa pilihan lain salah</b><ul>'+wrong+'</ul></div>'
+      +'<div class="box gold"><b>💡 Exam pearl:</b> '+it.pearl+'</div>';
+    f.classList.add('show');
+    $('#score').textContent='Skor: '+correct+' / '+TOTAL_Q;
+    updateProgress();
+  });
+  $('#reset').onclick=build;
+  build();
+  updateProgress();
+})();
+</script>
+</body>
+</html>
